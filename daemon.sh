@@ -67,12 +67,12 @@ EMC2301_monitor(){
 		fi
 	done
 	if [ $speed -ge 100 ]; then
-		echo "$FUNCNAME: Disabling FSCA, Set Drive to max"
+		[ "$VERBOSE" -eq 1 ] && echo "$FUNCNAME: Disabling FSCA, Set Drive to max" || true
 		EMC2301_setFSCAEnable 0 && DAEMON_FSCA=0
 		EMC2301_setDrive 100
 		return
 	elif [ $DAEMON_FSCA -eq 0 ]; then
-		echo "$FUNCNAME: Enabling FSCA"
+		[ "$VERBOSE" -eq 1 ] && echo "$FUNCNAME: Enabling FSCA" || true
 		EMC2301_setFSCAEnable 1 && DAEMON_FSCA=1
 	fi
 	local rpm_target=0
@@ -85,9 +85,7 @@ EMC2301_monitor(){
 		tach_target=$(EMC2301_convertTachRPM $rpm_target)
 	fi
 	if [ $tach_target != $DAEMON_TACH_TARGET ]; then
-		if [ "$VERBOSE" -eq 1 ]; then
-			echo "$FUNCNAME: Temperature: $temp	Target RPM: $rpm_target	Target Tach: $tach_target"
-		fi
+		[ "$VERBOSE" -eq 1 ] && echo "$FUNCNAME: Temperature: $temp	Target RPM: $rpm_target	Target Tach: $tach_target" || true
 		EMC2301_setTachTarget $tach_target
 		DAEMON_TACH_TARGET=$tach_target
 	fi
