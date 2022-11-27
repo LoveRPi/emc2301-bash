@@ -1,0 +1,69 @@
+8 bit transfers
+
+1 bit start
+
+7 bit address
+1 bit read/write
+1 bit ack
+
+8 bit register
+1 bit ack
+
+8 bit data
+1 bit ack
+
+1 bit stop
+
+i2cget chip register mode
+addr
+data
+mode - b read byte, w read word, c write byte/read byte
+
+i2cset chip register value mode
+addr
+data
+mode - c byte, b data, w word, i 
+
+0x20 r/w 40 clocking and watchdog
+0x24 r-c 00 status for rpm fan control
+0x25 r-c 00 status for stalled fan
+0x26 r-c 00 status for spinup failure
+0x27 r-c 00 status for drive failure
+0x29 r/w 00 control interrupts for fan related channels
+0x2a r/w 00 pwm polarity
+0x2b r/w 00 pwm output type
+0x2d r/w 00 pwm base frequency
+0x30 r/w 00 most recent driver input or direct control
+0x31 r/w 01 pwm divide ratio
+0x32 r/w 2b config for fsca
+0x33 r/w 28 additional config
+0x35 r/w 2a gain terms for rpm fsca
+0x36 r/w 19 fan spin up configuration
+0x37 r/w 10 fan max step
+0x38 r/w 66 fan minimum drive
+0x39 r/w f5 tacho reading for fan spin properly
+0x3a r/w 00 fan drive fail low byte tach count
+0x3b r/w 00 fan drive fail high byte tach count
+0x3c r/w f8 holds target tach reading low byte
+0x3d r/w ff holds target tach reading high byte
+0x3e r   ff holds tach reading high byte
+0x3f r   f8 holds tach reading low byte
+0xef r/w 00 software lock
+0xfd r   37 product id
+0xfe r   5d manufacture id
+0xff r   80 revision
+
+0c address
+2f address
+
+# set fan speed
+i2cset -y 1 0x2f 0x30 0xcc b
+
+# control algorithm
+i2cset -y 1 0x2f 0x32 0x2b b - off
+i2cset -y 1 0x2f 0x32 0xab b - on
+
+# control minimum drive
+i2cset -y 1 0x2f 0x38 0x40 b
+
+i2cget -y 1 0x2f 0x3e w
